@@ -1,0 +1,266 @@
+/* =========================================
+   ArtworkFilters.css  (light, coral theme)
+   ========================================= */
+
+/* ---------- Card palette & layout (scoped) ---------- */
+.art-filters {
+  --accent: #ff6b6b;      /* coral red */
+  --accent-weak: #ffe5e5; /* pale coral for fills */
+  --stroke: #ffd1d1;      /* soft border */
+  --text: #1f2937;        /* slate-800 */
+  --muted: #6b7280;       /* slate-500 */
+  --bg: #ffffff;
+
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 24px;
+  padding: 28px 24px 32px;
+  box-shadow: 0 18px 40px rgba(255, 107, 107, 0.18);
+  max-width: 800px;       /* wider card */
+  width: 100%;
+  margin: 24px auto;      /* centered with breathing room */
+  
+}
+
+@media (min-width: 640px) { .art-filters { max-width: 640px; } }
+@media (min-width: 1024px){ .art-filters { max-width: 700px; } }
+
+/* ---------- Headings ---------- */
+.art-filters h1 {
+  text-align: center;
+  color: var(--accent);
+  font-size: 26px;
+  font-weight: 800;
+  margin: 2px 0 18px;
+}
+
+.art-filters h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 8px 0 10px;
+}
+
+/* ---------- Section spacing ---------- */
+.art-type,
+.themes,
+.price-range {
+  margin-top: 24px;   /* more space between sections */
+  padding-top: 6px;
+}
+
+/* =========================================
+   Art Type (accordion + chips)
+   ========================================= */
+.art-type > div { margin-bottom: 10px; }
+
+.art-type h4 {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 15px; font-weight: 700;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--text);
+  transition: background .2s, color .2s;
+}
+.art-type h4:hover { background: #fafafa; }
+
+.art-type div > div {                /* open panel content */
+  margin-top: 10px;
+  display: flex; flex-wrap: wrap; gap: 10px;
+}
+
+.art-type div > div p {              /* chips */
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--stroke);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1;
+  transition: background .15s, border-color .15s, color .15s, transform .05s;
+}
+.art-type div > div p:hover {
+  background: var(--accent-weak);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* =========================================
+   Themes (search + list like dropdown)
+   ========================================= */
+.themes input[type="text"],
+.themes input:not([type]) {
+  width: 80%;
+  padding: 12px 14px;
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+  box-shadow: 0 2px 10px rgba(17, 24, 39, 0.06);
+  transition: border-color .2s, box-shadow .2s;
+}
+.themes input[type="text"]::placeholder,
+.themes input:not([type])::placeholder { color: #9ca3af; }
+.themes input[type="text"]:focus,
+.themes input:not([type]):focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.15);
+}
+
+.themes ul {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 12px;
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(17, 24, 39, 0.08);
+  display: grid; gap: 10px;
+}
+
+.themes li label {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--accent-weak);
+  color: var(--text);
+  cursor: pointer;
+  transition: background .15s, transform .05s;
+}
+.themes li label:hover { background: #ffdedd; }
+.themes input[type="checkbox"] { accent-color: var(--accent); }
+
+/* =========================================
+   Price Range (inputs + dual slider)
+   ========================================= */
+.price-range h2 { margin: 0 0 12px; }
+
+.price-range .price-inputs {
+  display: flex;
+  gap: 16px;                 /* more room between inputs */
+  align-items: center;
+  margin: 10px 0 12px;
+}
+
+.price-range .price-inputs input[type="number"] {
+  width: 50%;
+  height: 15px;              /* taller inputs */
+  padding: 10px 12px;
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.price-range .price-inputs input[type="number"]::placeholder { color: #9ca3af; }
+.price-range .price-inputs input[type="number"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.15);
+}
+
+/* min/max labels under inputs, above slider */
+.price-range .price-labels {
+  display: flex; justify-content: space-between;
+  color: var(--accent);
+  font-size: 12px;
+  margin: 6px 0 12px;        /* add space before the slider */
+}
+
+/* One bar with two thumbs */
+.dual-range { position: relative; height: 34px; margin-bottom: 8px; }
+.dual-range .track {
+  position: absolute; top: 50%; left: 0; right: 0;
+  height: 10px; transform: translateY(-50%);
+  background: var(--accent-weak);
+  border-radius: 999px;
+}
+.dual-range .range {
+  position: absolute; top: 50%;
+  height: 10px; transform: translateY(-50%);
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+/* overlay sliders */
+.dual-range input[type="range"] {
+  position: absolute; top: 0; left: 0; right: 0;
+  width: 100%; height: 34px; margin: 0;
+  background: none;
+  -webkit-appearance: none; appearance: none;
+  pointer-events: none; /* thumbs clickable via pointer-events below */
+}
+.dual-range input[type="range"]:last-of-type { z-index: 3; }
+.dual-range input[type="range"]::-webkit-slider-runnable-track { background: transparent; }
+.dual-range input[type="range"]::-moz-range-track { background: transparent; }
+
+/* thumbs */
+.dual-range input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.35);
+  pointer-events: auto; cursor: pointer;
+}
+.dual-range input[type="range"]::-moz-range-thumb {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.35);
+  pointer-events: auto; cursor: pointer;
+}
+
+/* Focus ring when either slider is focused */
+.dual-range:focus-within .track,
+.dual-range:focus-within .range {
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.15);
+}
+/* === Categories Button === */
+.categories-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;                        
+  padding: 8px 20px;
+  font-family: 'Rubik', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3f3f3f;
+  background: #fff;
+  border: 1px solid #ff4d4d;      
+  border-radius: 50px;            
+  cursor: pointer;
+  transition: all 0.25s ease;
+  
+}
+
+/* Hover */
+
+
+/* Active state */
+.categories-btn.active {
+  background: #ff4d4d;
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(255, 77, 77, 0.3);
+}
+
+/* === Simple 3-line "hamburger" === */
+.menu-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;   /* space between lines */
+}
+
+.menu-icon span {
+  display: block;
+  width: 14px;
+  height: 2px;
+  background: currentColor; /* same color as text */
+  border-radius: 2px;
+}

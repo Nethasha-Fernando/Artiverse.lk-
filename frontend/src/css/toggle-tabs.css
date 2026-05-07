@@ -1,0 +1,38 @@
+/* === Toggle Tabs Container === */
+.simple-toggle-tabs {
+  display: inline-flex;
+  border: 1px solid #ff4d4d;   /* red outline around group */
+  border-radius: 50px;         /* pill shape */
+  background: #fff;
+  padding: 4px;                /* 🎯 inner padding so buttons don't touch border */
+  margin-left: 208px;          /* left margin as you wanted */
+  gap: 4px;                    /* small gap between buttons */
+}
+
+/* === Base Button === */
+.simple-toggle-tabs button {
+  flex: 1;
+  padding: 8px 24px;
+  font-family: 'Rubik', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3f3f3f;
+  background: transparent;
+  border: none;
+  border-radius: 50px;         /* keep pill shape inside */
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* Hover effect for inactive buttons */
+.simple-toggle-tabs button:hover {
+  background: #fff5f5; /* faint red tint */
+  color: #ff4d4d;      /* red text on hover */
+}
+
+/* === Active Button === */
+.simple-toggle-tabs button.active {
+  background: #ff4d4d;   /* solid red */
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(255, 77, 77, 0.3);
+}
