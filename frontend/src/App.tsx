@@ -45,30 +45,6 @@ function App() {
           path="/artworks"
           element={
             <div>
-              <div className="categories">
-                <button
-                  className={`categories-btn ${showFilters ? "active" : ""}`}
-                  onClick={() => setShowFilters((v) => !v)}
-                >
-                  <span className="menu-icon">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </span>
-                  Categories
-                </button>
-              </div>
-
-              <ArtworkGrid grid={grid} />
-
-              {showFilters && (
-                <ArtworkFilters
-                  ArtType={ArtType}
-                  Themes={Themes}
-                  priceRange={priceRange}
-                />
-              )}
-
               <Gallery />
             </div>
           }

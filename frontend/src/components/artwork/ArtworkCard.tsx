@@ -1,5 +1,6 @@
 import type { Artwork } from "./types";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 type ArtworkCardProps = { artwork: Artwork };
 
@@ -10,76 +11,80 @@ function formatLikes(n = 0) {
 }
 
 export default function ArtworkCard({ artwork }: ArtworkCardProps) {
-  const {
-    id,
-    slug,
-    imageURL,
-    title,
-    artistName,
-    medium,
-    price,
-    likes = 0,
-  } = artwork;
+  const { id, slug, imageURL, title, artistName, medium, price, likes = 0 } = artwork;
   const navigate = useNavigate();
   const to = `/artworks/${id}/${slug}`;
 
-  // stop click bubbling so buttons don't trigger card navigation
-  const stop = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const [liked, setLiked] = useState(false);
+  const [count, setCount] = useState(likes);
+  const [pop, setPop] = useState(false);
+
+  const stop = (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); };
+
+  const handleLike = (e: React.MouseEvent) => {
+    stop(e);
+    const nextLiked = !liked;
+    setLiked(nextLiked);
+    setCount(nextLiked ? count + 1 : count - 1);
+    setPop(true);
+    setTimeout(() => setPop(false), 300);
   };
 
   return (
     <div
-      onClick={() => navigate(to)} // whole card navigates
-      className="cursor-pointer bg-white [border-radius:20px] border border-[rgba(196,196,196,0.5)]
+      onClick={() => navigate(to)}
+      className="cursor-pointer bg-white [border-radius:16px] border border-[rgba(196,196,196,0.5)]
                  [box-shadow:0_2px_15px_rgba(0,0,0,0.15)] overflow-hidden w-full
                  hover:shadow-[0_0_15px_rgba(214,45,45,0.75)] hover:border-[rgba(214,45,45,0.4)]
-                 hover:border-[1px] transition"
+                 transition"
     >
+      
       <img
         src={imageURL}
         alt={title}
         loading="lazy"
-        className="block w-full h-[230px] object-cover"
+        className="block w-full h-[205px] object-cover"
       />
 
-      <div className="px-4 py-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-[20px] font-medium font-['Roboto'] text-[#3F3F3F]">
+      <div className="px-3 py-2.5">
+        <div className="flex items-center justify-between gap-1">
+          <h3 className="text-[14px] font-medium font-['Roboto'] text-[#3F3F3F] leading-snug truncate">
             {title}
           </h3>
 
-          {/* Like button (doesn't navigate) */}
-          <button type="button" onClick={stop} className="like-pill">
-            <span className="text-[#5A5A5A]">👍</span>
-            <span className="font-['Rubik'] font-normal text-[#484848] text-[16px]">
-              {formatLikes(likes)}
+          <button
+            type="button"
+            onClick={handleLike}
+            className={`flex-shrink-0 flex items-center gap-0.5 px-1.5 py-0.5 rounded-full transition-all duration-200
+              ${liked ? "bg-red-50 border border-red-200" : "border border-transparent"}
+              ${pop ? "scale-125" : "scale-100"}`}
+          >
+            <span className="text-sm">{liked ? "❤️" : "🤍"}</span>
+            <span className={`font-['Rubik'] font-normal text-[13px] transition-colors duration-200
+              ${liked ? "text-red-500" : "text-[#484848]"}`}>
+              {formatLikes(count)}
             </span>
           </button>
         </div>
 
-        <p className="font-['Roboto'] font-medium text-[18px] text-[#484848]">
+        <p className="font-['Roboto'] font-medium text-[12px] text-[#2e2e2e] mt-0.5">
           {artistName}
         </p>
-        <p className="font-['Roboto'] font-light text-[#272727] text-[12px]">
+        <p className="font-['Roboto'] font-light text-[11px] text-[#888888]">
           #{medium}
         </p>
 
-        <div className="mt-3 flex items-center justify-between">
-          {/* Add to cart (doesn't navigate) */}
+        <div className="mt-2 flex items-center justify-between">
           <button
             type="button"
             onClick={stop}
-            className="w-8 h-8 flex items-center justify-center [border-radius:10px]
-                       border-2 border-[#FFA8A6] hover:border-transparent hover:bg-[#FFA8A6] transition"
+            className="w-7 h-7 flex items-center justify-center rounded-[8px]
+                       border-2 border-[#FFA8A6] hover:border-transparent hover:bg-[#FFA8A6] transition text-sm"
           >
             🛒
           </button>
-
-          <span className="text-[#272727] font-['Roboto'] text-[18px] font-medium">
-            <span className="text-[12px] font-light mr-1">LKR</span>
-            {price}
+          <span className="text-[#272727] font-['Roboto'] text-[14px] font-medium">
+            <span className="text-[10px] font-light mr-0.5">LKR</span>{price}
           </span>
         </div>
       </div>

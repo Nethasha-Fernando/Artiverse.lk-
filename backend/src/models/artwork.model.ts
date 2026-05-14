@@ -16,9 +16,9 @@ const artworkSchema = new mongoose.Schema(
       maxlength: 2000,
     },
     orientation: {
-      type: String,
-      enum: ["Landscape", "Portrait"],
-    },
+    type: String,
+    enum: ["Landscape", "Portrait", "Square"],
+  },
 
     // ---------- Images ----------
     mainImageUrl: { type: String, required: true },
@@ -51,17 +51,33 @@ const artworkSchema = new mongoose.Schema(
     },
 
     // ---------- Prints (variants) ----------
-    prints: {
-      type: [
-        {
-          surfaceMaterial: { type: String, required: true, trim: true },
-          widthCm: { type: Number, min: 1, required: true },
-          heightCm: { type: Number, min: 1, required: true },
-          priceLkr: { type: Number, min: 0, required: true },
-        },
-      ],
-      default: [],
+    prints: [
+  {
+    surfaceMaterial: {
+      type: String,
+      required: true,
     },
+
+    sizes: [
+      {
+        width: {
+          type: Number,
+          required: true,
+        },
+
+        height: {
+          type: Number,
+          required: true,
+        },
+
+        price: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+  },
+],
 
     // ---------- Frames Available (for PRINTS) ----------
     // When the user clicks “Add more frames”, they can attach offerings:
