@@ -45,7 +45,11 @@ app.use("/api/artworks", artworkRoutes);  //so all URLs start with /api/artworks
 
 // ---------- DB + Server ----------
 const PORT = Number(process.env.PORT) || 4000;
-const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/artiverse";
+const MONGO_URI = process.env.MONGO_URI;
+
+if (!MONGO_URI) {
+  throw new Error("❌ MONGO_URI is missing in .env file");
+}
 
 mongoose
   .connect(MONGO_URI)
