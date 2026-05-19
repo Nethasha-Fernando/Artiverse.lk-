@@ -8,6 +8,7 @@ import Gallery from "./components/artwork/Gallery";
 import ArtworkFilters from "./components/artwork/ArtworkFilters";
 import ArtworkGrid from "./components/artwork/ArtworkGrid";
 import CreateArtworkPage from "./pages/CreateArtworkPage";
+import ArtistsPage from "./pages/ArtistsPage";
 
 type GridItem = {
   label: string;
@@ -63,6 +64,11 @@ function App() {
         <Route
           path="/artworks/create"
           element={<CreateArtworkPage />}
+        />
+
+        <Route
+          path="/artists"
+          element={<ArtistsPage />}
         />
 
         <Route

@@ -63,7 +63,7 @@ function Gallery() {
         />
         <button
           onClick={() => navigate("/artworks/create")}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-red-500 text-white text-sm font-semibold hover:bg-red-600 active:scale-95 transition-all shadow-md shadow-red-200 whitespace-nowrap"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#FF5C5C] text-white text-sm font-semibold hover:bg-[#F54E4E] active:scale-95 transition-all shadow-[0_10px_30px_rgba(255,92,92,0.18)] border border-[#FF5C5C]/20 whitespace-nowrap"
         >
           ＋ Create Artwork
         </button>
@@ -82,7 +82,7 @@ function Gallery() {
               <p className="text-sm">No artworks yet.</p>
               <button
                 onClick={() => navigate("/artworks/create")}
-                className="mt-2 px-5 py-2 rounded-full bg-red-500 text-white text-sm hover:bg-red-600 transition"
+                className="mt-2 px-5 py-2 rounded-full bg-[#FF5C5C] text-white text-sm hover:bg-[#F54E4E] transition shadow-[0_6px_16px_rgba(255,92,92,0.16)] border border-[#FF5C5C]/20"
               >
                 Create your first artwork
               </button>
