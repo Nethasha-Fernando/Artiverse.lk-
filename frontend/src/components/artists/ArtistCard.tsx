@@ -1,3 +1,4 @@
+import React from "react";
 import ViewProfileButton from "./ViewProfileButton";
 
 export type Artist = {
@@ -9,36 +10,47 @@ export type Artist = {
   followers: number;
 };
 
+function formatStatCount(value: number): string {
+  if (value >= 1000) {
+    return `${(value / 1000).toFixed(1)}K`;
+  }
+  return String(value);
+}
+
 export default function ArtistCard({ artist }: { artist: Artist }) {
   return (
-    <article className="overflow-hidden rounded-[32px] border border-[#C4C4C4] bg-cardBackground shadow-sm transition duration-200 hover:shadow-md">
-      <div className="relative">
+    <article className="w-[280px] overflow-hidden rounded-[20px] border border-[#C4C4C4] bg-card-background shadow-card transition duration-200 hover:-translate-y-0.5 hover:shadow-card-hover">
+      <div className="relative h-[155px]">
         <img
           src={artist.coverImage}
           alt={`${artist.name} cover`}
-          className="h-40 w-full object-cover"
+          className="h-full w-full rounded-t-[20px] object-cover"
         />
-        <div className="absolute left-1/2 top-[calc(100%-3rem)] -translate-x-1/2 rounded-full border-4 border-white bg-white">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
           <img
             src={artist.profileImage}
             alt={artist.name}
-            className="h-20 w-20 rounded-full object-cover"
+            className="h-20 w-20 rounded-full border-[3px] border-white object-cover"
           />
         </div>
       </div>
 
-      <div className="px-6 pb-6 pt-12 text-center">
-        <h2 className="text-[22px] font-medium text-[#000000] font-['Roboto']">{artist.name}</h2>
+      <div className="px-5 pb-6 pt-12 text-center font-heading">
+        <h2 className="text-[20px] font-medium text-black">{artist.name}</h2>
 
-        <div className="mt-4 flex items-center justify-center gap-6 border-t border-[#E5E5E5] pt-4 font-['Roboto']">
-          <div className="min-w-[85px] text-center">
-            <p className="text-[12px] font-bold text-[#434343]">{(artist.followers / 1000).toFixed(1)}K</p>
-            <p className="text-[14px] font-medium text-[#666666]">Followers</p>
+        <div className="mt-4 flex items-center justify-center gap-5">
+          <div className="min-w-[72px] text-center">
+            <p className="text-[18px] font-bold text-[#434343]">
+              {formatStatCount(artist.followers)}
+            </p>
+            <p className="text-sm font-normal text-text-sub-body">Followers</p>
           </div>
-          <div className="h-10 w-px bg-[#E5E5E5]" />
-          <div className="min-w-[85px] text-center">
-            <p className="text-[12px] font-bold text-[#434343]">{(artist.likes / 1000).toFixed(1)}K</p>
-            <p className="text-[14px] font-medium text-[#666666]">Likes</p>
+          <div className="h-[34px] w-px bg-[#D9D9D9]" aria-hidden />
+          <div className="min-w-[72px] text-center">
+            <p className="text-[18px] font-bold text-[#434343]">
+              {formatStatCount(artist.likes)}
+            </p>
+            <p className="text-sm font-normal text-text-sub-body">Likes</p>
           </div>
         </div>
 

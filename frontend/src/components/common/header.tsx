@@ -31,7 +31,7 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full bg-pageBackground border-b h-16">
+    <header className="w-full bg-page-background border-b h-16">
       <div className="w-full px-2 sm:px-4 lg:px-6 flex items-center justify-between h-16">
         {/* Logo */}
         <div className="flex items-center flex-shrink-0">
@@ -52,7 +52,7 @@ const Header = () => {
             <Link
               key={item.label}
               to={item.to}
-              className="relative text-textBody hover:textMainHeading transition-colors font-regular font-body whitespace-nowrap
+              className="relative text-text-body hover:text-text-main-heading transition-colors font-regular font-body whitespace-nowrap
               after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full hover:font-medium"
             >
               {item.label}
@@ -66,7 +66,7 @@ const Header = () => {
           {isSearchOpen && (
             <div className="hidden md:block absolute mr-1 right-full top-1/2 transform -translate-y-1/2 w-60">
               <form onSubmit={handleSearchSubmit} className="w-full">
-                <div className="flex items-center w-full bg-cardBackground rounded-xl border border-border focus-within:border-secButtonStroke shadow-sm h-9">
+                <div className="flex items-center w-full bg-card-background rounded-xl border border-border focus-within:border-sec-button-stroke shadow-sm h-9">
                   <div className="pl-3">
                     <img src={icons.search} alt="search" width={16} height={16} className="opacity-60" />
                   </div>
@@ -76,7 +76,7 @@ const Header = () => {
                     placeholder="Search..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="flex-1 px-2 py-2 bg-transparent outline-none text-textBody placeholder-textFootnote text-sm"
+                    className="flex-1 px-2 py-2 bg-transparent outline-none text-text-body placeholder-text-footnote text-sm"
                   />
                   {searchQuery && (
                     <button
@@ -132,9 +132,9 @@ const Header = () => {
 
       {/* Mobile Search Bar - appears below header on mobile */}
       {isSearchOpen && (
-        <div className="block md:hidden px-4 py-3 bg-pageBackground border-b">
+        <div className="block md:hidden px-4 py-3 bg-page-background border-b">
           <form onSubmit={handleSearchSubmit} className="w-full">
-            <div className="flex items-center w-full bg-cardBackground rounded-lg border border-border focus-within:border-secButtonStroke shadow-sm">
+            <div className="flex items-center w-full bg-card-background rounded-lg border border-border focus-within:border-sec-button-stroke shadow-sm">
               <div className="pl-3">
                 <img src={icons.search} alt="search" width={18} height={18} className="opacity-60" />
               </div>
@@ -143,7 +143,7 @@ const Header = () => {
                 placeholder="Search for arts, artists, events..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 px-3 py-3 bg-transparent outline-none text-textBody placeholder-textFootnote text-sm"
+                className="flex-1 px-3 py-3 bg-transparent outline-none text-text-body placeholder-text-footnote text-sm"
               />
                {searchQuery && (
                     <button
@@ -179,7 +179,7 @@ const Header = () => {
             <Link
               key={item.label}
               to={item.to}
-              className="relative text-textBody hover:textMainHeading transition-colors font-regular font-body text-sm
+              className="relative text-text-body hover:text-text-main-heading transition-colors font-regular font-body text-sm
                 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full hover:font-medium"
             >
               {item.label}

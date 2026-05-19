@@ -1,5 +1,29 @@
 @import "tailwindcss";
 
-body{
+/* Tailwind v4 design tokens (use kebab-case utility names, e.g. bg-page-background) */
+@theme {
+  --color-primary: #ff5c5c;
+  --color-secondary: #c41a1a;
+  --color-accent: #ffdddc;
+  --color-sec-button-stroke: #ffa8a6;
+  --color-page-background: #fbfbfb;
+  --color-card-background: #fcfcfc;
+  --color-text-main-heading: #272727;
+  --color-text-sec-heading: #3f3f3f;
+  --color-text-body: #484848;
+  --color-text-sub-body: #666666;
+  --color-text-footnote: #848484;
+  --color-text-button: #464646;
+  --color-icon: #5a5a5a;
+  --color-border: #cfcfcf;
+
+  --font-heading: "Roboto", sans-serif;
+  --font-body: "Inter", sans-serif;
+
+  --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+body {
   overflow-x: hidden;
 }
