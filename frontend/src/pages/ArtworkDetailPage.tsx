@@ -335,9 +335,8 @@ export default function ArtworkDetailPage() {
 
   const getFramePrice = (frame: Frame | null): number => {
     if (!frame) return 0;
-    if (frame.extraPriceLkr !== null && frame.extraPriceLkr > 0) return frame.extraPriceLkr;
-    return frame.widthCm * 100;
-  };
+    return frame.extraPriceLkr ?? 0;
+};
 
   const framePrice = addFrame && selectedFrame ? getFramePrice(selectedFrame) : 0;
   const total = basePrice + framePrice;
