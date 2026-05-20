@@ -1,3 +1,4 @@
+import React from "react";
 import { icons } from "../../Constants/icons";
 import type { ArtistUpcomingEvent } from "../../types/artistProfile";
 

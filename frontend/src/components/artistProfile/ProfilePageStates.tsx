@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
 interface ProfilePageStateProps {
@@ -26,15 +27,19 @@ function ProfilePageState({ title, message }: ProfilePageStateProps) {
 
 export function ProfileLoadingState() {
   return (
-    <main className="min-h-screen bg-page-background px-4 py-10 sm:px-6 lg:px-10">
-      <div className="mx-auto max-w-7xl animate-pulse">
-        <div className="h-[200px] rounded-[18px] bg-gray-200 sm:h-[240px] lg:h-[280px]" />
-        <div className="mt-8 flex flex-col gap-8 lg:flex-row">
-          <div className="mx-auto h-[420px] w-full max-w-[270px] rounded-[18px] bg-gray-200" />
-          <div className="flex-1 space-y-4">
-            <div className="h-6 w-24 rounded bg-gray-200" />
-            <div className="h-10 w-48 rounded bg-gray-200" />
-            <div className="h-32 w-full rounded bg-gray-200" />
+    <main className="min-h-screen bg-page-background pb-10">
+      <div className="h-[200px] w-full animate-pulse bg-gray-200 sm:h-[240px] lg:h-[280px]" />
+      <div className="w-full px-4 sm:px-6 lg:pl-6 lg:pr-12 xl:pl-8 xl:pr-16">
+        <div className="mx-auto grid w-full max-w-[1800px] animate-pulse grid-cols-1 gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-x-10">
+          <div className="w-full max-w-[260px] justify-self-start space-y-4">
+            <div className="mt-4 h-[130px] w-[130px] rounded-full bg-gray-200" />
+            <div className="h-[280px] rounded-[18px] bg-gray-200" />
+            <div className="h-[140px] rounded-[18px] bg-gray-200" />
+            <div className="h-[120px] rounded-[18px] bg-gray-200" />
+          </div>
+          <div className="space-y-4 lg:pt-[4.5rem]">
+            <div className="h-10 w-64 rounded bg-gray-200" />
+            <div className="h-48 w-full rounded bg-gray-200" />
           </div>
         </div>
       </div>

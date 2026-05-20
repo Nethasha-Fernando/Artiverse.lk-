@@ -1,3 +1,4 @@
+import React from "react";
 import { formatStatCount } from "../../utils/formatStatCount";
 
 interface ArtistStatsRowProps {

@@ -1,28 +1,19 @@
-import { icons } from "../../Constants/icons";
+import React from "react";
 import type { ArtistProfile } from "../../types/artistProfile";
+
 interface AboutSectionProps {
   artist: ArtistProfile;
 }
 
 export default function AboutSection({ artist }: AboutSectionProps) {
   return (
-    <section className="min-w-0 flex-1 lg:pt-4">
-      <div className="mb-6 flex items-start justify-end">
-        <button
-          type="button"
-          className="flex items-center gap-1.5 font-body text-sm text-text-footnote transition hover:text-text-body"
-        >
-          <img src={icons.report} alt="" className="h-4 w-4 opacity-70" />
-          Report
-        </button>
-      </div>
-
+    <section className="min-w-0">
       <p className="font-heading text-lg font-medium uppercase tracking-wide text-text-footnote">
         A BIT
       </p>
 
-      <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
-        <h2 className="font-heading text-[30px] font-medium uppercase text-text-sub-body">
+      <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
+        <h2 className="font-heading text-[30px] font-medium uppercase text-text-main-heading">
           ABOUT ME
         </h2>
         <p className="flex items-center gap-2 font-body text-base font-medium text-text-footnote">
@@ -39,13 +30,12 @@ export default function AboutSection({ artist }: AboutSectionProps) {
         {artist.tags.map((tag) => (
           <li
             key={tag}
-            className="font-body text-[15px] font-normal text-text-body"
+            className="font-body text-[15px] font-normal text-text-sub-body"
           >
             #{tag}
           </li>
         ))}
       </ul>
-
     </section>
   );
 }

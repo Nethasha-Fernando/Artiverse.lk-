@@ -1,3 +1,4 @@
+import React from "react";
 import type { ArtistProfileTab } from "../../types/artistProfile";
 
 const tabs: { id: ArtistProfileTab; label: string }[] = [
@@ -17,10 +18,10 @@ export default function ProfileSubNav({
 }: ProfileSubNavProps) {
   return (
     <nav
-      className="mt-5 border-b border-border"
+      className="w-full overflow-x-auto border-b border-border"
       aria-label="Artist profile sections"
     >
-      <ul className="flex gap-1 sm:gap-2">
+      <ul className="flex min-w-[260px] gap-2 sm:gap-3">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           return (
