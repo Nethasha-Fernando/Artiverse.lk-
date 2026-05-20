@@ -2,8 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { icons } from '../../Constants/icons';
 import { images } from '../../Constants/images';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const Header = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -123,10 +127,28 @@ const Header = () => {
             <img src={icons.shopping_cart} alt="shopping cart" width={20} height={20} />
           </button>
 
-          {/* Sign in Button */}
-          <button className="px-4 sm:px-5 lg:px-6 py-2 rounded-full bg-gradient-to-b from-[#FF5C5C] to-[#C41A1A] text-white font-medium font-body shadow-md hover:shadow-[0_2px_10px_0_#BF4D4D] transition whitespace-nowrap text-sm sm:text-base">
-            Sign in
-          </button>
+          {user ? (
+            <div className="flex items-center gap-2">
+              <span className="hidden sm:inline text-sm text-text-body font-body truncate max-w-[120px]">
+                {user.firstName}
+              </span>
+              <button
+                type="button"
+                onClick={() => navigate('/logout')}
+                className="px-4 sm:px-5 py-2 rounded-full border border-[#C41A1A] text-[#C41A1A] font-medium font-body hover:bg-red-50 transition whitespace-nowrap text-sm sm:text-base"
+              >
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => navigate('/login')}
+              className="px-4 sm:px-5 lg:px-6 py-2 rounded-full bg-gradient-to-b from-[#FF5C5C] to-[#C41A1A] text-white font-medium font-body shadow-md hover:shadow-[0_2px_10px_0_#BF4D4D] transition whitespace-nowrap text-sm sm:text-base"
+            >
+              Sign in
+            </button>
+          )}
         </div>
       </div>
 

@@ -16,6 +16,7 @@ export async function artworkDetailsService(idOrSlug: string) {
       _id: 1,
       name: 1,
       description: 1,
+      category: 1,
       orientation: 1,
       mainImageUrl: 1,
       supportingImageUrls: 1,

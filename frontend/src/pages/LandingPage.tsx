@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ArtworkCard from "../components/artwork/ArtworkCard";
 import ToggleTabs  from "../components/artwork/toggleTabs";
 import type { Artwork } from "../components/artwork/types";
+import { mapArtworkFromApi } from "../utils/mapArtwork";
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 
@@ -52,20 +53,14 @@ function ExploreSection() {
   const [tab, setTab]           = useState<"arts" | "artists">("arts");
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/artworks")
+    fetch("/api/artworks")
       .then((r) => r.json())
-      .then((data: any[]) => {
-        const mapped: Artwork[] = data.slice(0, 8).map((item) => ({
-          id:         item._id,
-          slug:       item.name.toLowerCase().replace(/\s+/g, "-"),
-          imageURL:   item.mainImageUrl,
-          title:      item.name,
-          artistName: item.artistName ?? "Unknown", // TODO: populate from API
-          medium:     item.originalArt?.surfaceMaterial ?? "",
-          price:      item.originalArt?.priceLkr ?? 0,
-          likes:      0,
-        }));
-        setArtworks(mapped);
+      .then((data: unknown) => {
+        if (!Array.isArray(data)) {
+          setArtworks([]);
+          return;
+        }
+        setArtworks(data.slice(0, 8).map(mapArtworkFromApi));
       })
       .catch(() => setArtworks([]))
       .finally(() => setLoading(false));

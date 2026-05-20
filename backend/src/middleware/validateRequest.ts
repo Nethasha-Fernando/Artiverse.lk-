@@ -1,12 +1,15 @@
 import { Request, Response, NextFunction } from "express";
+import { normalizeCategory } from "../constants/artCategories";
 
 /**
  * Simple validator for POST /api/artworks
  * - name: required, 2..120 chars
+ * - category: required, must be a known medium
  * - description: optional, max 2000 chars
  */
 export default function validateRequest(req: Request, res: Response, next: NextFunction) {
-  let { name, description, orientation ,mainImageUrl, supportingImageUrls } = req.body || {};  //eg {name="kanal",description="nice work"} what tahts does it name = "kamal" and description="nocee work"
+  let { name, description, category, orientation, mainImageUrl, supportingImageUrls } =
+    req.body || {};
 
   if (typeof mainImageUrl != "string" || mainImageUrl.trim()===""){
     return res.status(400).json({error: "Main image is required" })
@@ -37,6 +40,18 @@ export default function validateRequest(req: Request, res: Response, next: NextF
     return res.status(400).json({ error: "Name must be 120 characters or fewer." });
   }
 
+  if (typeof category !== "string" || !category.trim()) {
+    return res.status(400).json({ error: "Category is required." });
+  }
+  const normalizedCategory = normalizeCategory(category);
+  if (!normalizedCategory) {
+    return res.status(400).json({
+      error:
+        "Category must be one of: Gouache, Watercolor, Oil, Tempera, Acrylic, Charcoal, Pencil, Ink.",
+    });
+  }
+  category = normalizedCategory;
+
   // description is optional, but if present it must be a string and <= 2000
   if (description !== undefined) {  //of descpriton there then check 
     if (typeof description !== "string") {
@@ -47,22 +62,29 @@ export default function validateRequest(req: Request, res: Response, next: NextF
     }
   }
 // orientation
-const allowed = ["landscape", "portrait"]; // <-- lower-case
+const allowed = ["landscape", "portrait", "square"];
 if (orientation == null || String(orientation).trim() === "") {
   orientation = "Landscape";
 } else {
   const normalized = String(orientation).trim().toLowerCase();
   if (!allowed.includes(normalized)) {
-    return res.status(400).json({ error: "Orientation must be 'Landscape' or 'Portrait'." });
+    return res.status(400).json({
+      error: "Orientation must be 'Landscape', 'Portrait', or 'Square'.",
+    });
   }
-  // store in Title Case for consistency
-  orientation = normalized === "landscape" ? "Landscape" : "Portrait";
+  orientation =
+    normalized === "landscape"
+      ? "Landscape"
+      : normalized === "portrait"
+        ? "Portrait"
+        : "Square";
 }
 
 // You are replacing the original user input with a cleaned + validated version before passing it to the controller.  
   req.body.name = name;
-req.body.description = description;
-req.body.orientation = orientation;
+  req.body.description = description;
+  req.body.category = category;
+  req.body.orientation = orientation;
 req.body.mainImageUrl = mainImageUrl;
 req.body.supportingImageUrls = supportingImageUrls;
 // leave other fields (originalArt, frameOptions, prints, framesAvailable) intact

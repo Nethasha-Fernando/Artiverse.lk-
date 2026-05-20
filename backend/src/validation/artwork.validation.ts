@@ -1,7 +1,8 @@
 export type ArtworkCreate = {
   name: string;
   description?: string;
-  orientation: "Landscape" | "Portrait"; // enforce enum
+  category: string;
+  orientation: "Landscape" | "Portrait" | "Square";
   mainImageUrl: string;
   supportingImageUrls: string[]; // it should be an array, not string
 

@@ -1,7 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { FaGoogle, FaApple, FaFacebookF } from "react-icons/fa";
+import AuthPageLayout from "../components/auth/AuthPageLayout";
 
 // Inline SVG eye icons — no lucide dependency
 function EyeIcon() {
@@ -51,7 +52,7 @@ export default function RegisterPage() {
     setError("");
     setLoading(true);
     try {
-      const res  = await fetch("http://localhost:4000/api/auth/register", {
+      const res  = await fetch("/api/auth/register", {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body:    JSON.stringify(form),
@@ -75,11 +76,8 @@ export default function RegisterPage() {
   ];
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: "url('/paint-bg.jpg')" }}
-    >
-      <div className="bg-black/60 backdrop-blur-sm rounded-2xl p-8 w-full max-w-md space-y-4 text-white">
+    <AuthPageLayout>
+      <div className="space-y-4 text-white">
         <h1 className="text-2xl font-bold text-center">Create an account</h1>
 
         {/* Email */}
@@ -228,6 +226,6 @@ export default function RegisterPage() {
           </Link>
         </p>
       </div>
-    </div>
+    </AuthPageLayout>
   );
 }

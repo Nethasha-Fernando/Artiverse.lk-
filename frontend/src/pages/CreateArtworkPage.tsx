@@ -2,6 +2,8 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { ART_CATEGORIES } from "../constants/artCategories";
+import NumericInput, { parsePriceLkr } from "../components/common/NumericInput";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -35,6 +37,7 @@ interface OriginalArt {
 interface ArtworkForm {
   name:                   string;
   description:            string;
+  category:               string;
   mainImageUrl:           string | null;
   supportingImageUrls:    string[];
   originalArt:            OriginalArt;
@@ -220,19 +223,15 @@ function FramesPanel({
               value={frame.color}
               onChange={(e) => onUpdate(frame.id, "color", e.target.value)}
             />
-            <Input
-              type="number"
-              min={0}
+            <NumericInput
               placeholder="0"
               value={frame.widthCm}
-              onChange={(e) => onUpdate(frame.id, "widthCm", e.target.value)}
+              onChange={(v) => onUpdate(frame.id, "widthCm", v)}
             />
-            <Input
-              type="number"
-              min={0}
+            <NumericInput
               placeholder="Price"
               value={frame.extraPriceLkr}
-              onChange={(e) => onUpdate(frame.id, "extraPriceLkr", e.target.value)}
+              onChange={(v) => onUpdate(frame.id, "extraPriceLkr", v)}
             />
           </div>
           {frames.length > 1 && (
@@ -284,6 +283,7 @@ export default function CreateArtworkPage() {
   const [form, setForm] = useState<ArtworkForm>({
     name:                   "",
     description:            "",
+    category:               "",
     mainImageUrl:           null,
     supportingImageUrls:    [],
     originalArt:            { surfaceMaterial: "", widthCm: "", heightCm: "", priceLkr: "" },
@@ -377,6 +377,10 @@ export default function CreateArtworkPage() {
       setTimeout(() => setNameError(false), 2000);
       return;
     }
+    if (!form.category) {
+      setSubmitError("Please select a category (e.g. Oil, Tempera).");
+      return;
+    }
 
     // Derive orientation from dimensions — no manual select needed
     const orientation =
@@ -385,22 +389,23 @@ export default function CreateArtworkPage() {
     const payload = {
       name:               form.name,
       description:        form.description,
+      category:           form.category,
       orientation,
       mainImageUrl:        form.mainImageUrl ?? "",
       supportingImageUrls: form.supportingImageUrls,
       originalArt: {
         surfaceMaterial: form.originalArt.surfaceMaterial,
-        widthCm:         Number(form.originalArt.widthCm),
-        heightCm:        Number(form.originalArt.heightCm),
-        priceLkr:        Number(form.originalArt.priceLkr),
+        widthCm:         parsePriceLkr(form.originalArt.widthCm) || 1,
+        heightCm:        parsePriceLkr(form.originalArt.heightCm) || 1,
+        priceLkr:        parsePriceLkr(form.originalArt.priceLkr),
         isFramed:        form.offerFramingForOriginal === true,
       },
       prints: form.prints.map((p) => ({
         surfaceMaterial: p.surfaceMaterial,
         sizes: p.sizes.map((s) => ({
-          width:  Number(s.width),
-          height: Number(s.height),
-          price:  Number(s.price),
+          width:  parsePriceLkr(s.width) || 1,
+          height: parsePriceLkr(s.height) || 1,
+          price:  parsePriceLkr(s.price),
         })),
       })),
       frameOptions:
@@ -408,14 +413,14 @@ export default function CreateArtworkPage() {
           ? form.frames.map((f) => ({
               material:      f.surfaceMaterial,
               color:         f.color,
-              widthCm:       Number(f.widthCm)       || 0,
-              extraPriceLkr: Number(f.extraPriceLkr) || 0,
+              widthCm:       parsePriceLkr(f.widthCm),
+              extraPriceLkr: parsePriceLkr(f.extraPriceLkr),
             }))
           : [],
     };
 
     try {
-      const res  = await fetch("http://localhost:4000/api/artworks", {
+      const res  = await fetch("/api/artworks", {
         method:  "POST",
         headers: {
           "Content-Type": "application/json",
@@ -566,6 +571,23 @@ export default function CreateArtworkPage() {
       {/* Original art */}
       <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm space-y-3">
         <SectionLabel>Original Art</SectionLabel>
+
+        <div>
+          <FieldLabel>Category</FieldLabel>
+          <select
+            value={form.category}
+            onChange={(e) => setField("category", e.target.value)}
+            className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 outline-none transition focus:ring-1 focus:ring-red-300"
+          >
+            <option value="">Select category</option>
+            {ART_CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="grid grid-cols-3 gap-3">
           <div>
             <FieldLabel>Surface material</FieldLabel>
@@ -579,20 +601,18 @@ export default function CreateArtworkPage() {
           <div>
             <FieldLabel>Size (cm)</FieldLabel>
             <div className="flex gap-2 items-center">
-              <Input
-                type="number"
+              <NumericInput
                 placeholder="Width"
-                min={1}
                 value={form.originalArt.widthCm}
-                onChange={(e) => setOA("widthCm", e.target.value)}
+                onChange={(v) => setOA("widthCm", v)}
+                className="flex-1"
               />
               <span className="text-gray-300 text-xs flex-shrink-0">×</span>
-              <Input
-                type="number"
+              <NumericInput
                 placeholder="Height"
-                min={1}
                 value={form.originalArt.heightCm}
-                onChange={(e) => setOA("heightCm", e.target.value)}
+                onChange={(v) => setOA("heightCm", v)}
+                className="flex-1"
               />
             </div>
             {/* Live orientation preview derived from dimensions */}
@@ -604,12 +624,10 @@ export default function CreateArtworkPage() {
           </div>
           <div>
             <FieldLabel>Price (LKR)</FieldLabel>
-            <Input
-              type="number"
+            <NumericInput
               placeholder="Enter price"
-              min={0}
               value={form.originalArt.priceLkr}
-              onChange={(e) => setOA("priceLkr", e.target.value)}
+              onChange={(v) => setOA("priceLkr", v)}
             />
           </div>
         </div>
@@ -644,36 +662,36 @@ export default function CreateArtworkPage() {
                   <div />
                 )}
                 <div className="flex gap-1 items-center">
-                  <Input
+                  <NumericInput
                     placeholder="W"
                     value={size.width}
                     className="flex-1"
-                    onChange={(e) => {
+                    onChange={(v) => {
                       const updated = [...print.sizes];
-                      updated[idx] = { ...updated[idx], width: e.target.value };
+                      updated[idx] = { ...updated[idx], width: v };
                       updatePrint(print.id, "sizes", updated);
                     }}
                   />
                   <span className="text-gray-300 text-xs flex-shrink-0">×</span>
-                  <Input
+                  <NumericInput
                     placeholder="H"
                     value={size.height}
                     className="flex-1"
-                    onChange={(e) => {
+                    onChange={(v) => {
                       const updated = [...print.sizes];
-                      updated[idx] = { ...updated[idx], height: e.target.value };
+                      updated[idx] = { ...updated[idx], height: v };
                       updatePrint(print.id, "sizes", updated);
                     }}
                   />
                 </div>
                 <div className="flex items-center gap-1">
-                  <Input
+                  <NumericInput
                     placeholder="Price"
                     value={size.price}
                     className="flex-1"
-                    onChange={(e) => {
+                    onChange={(v) => {
                       const updated = [...print.sizes];
-                      updated[idx] = { ...updated[idx], price: e.target.value };
+                      updated[idx] = { ...updated[idx], price: v };
                       updatePrint(print.id, "sizes", updated);
                     }}
                   />

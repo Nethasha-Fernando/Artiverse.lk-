@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import React from "react";
 
 import Header from "./components/common/header";
@@ -11,29 +11,32 @@ import ArtistsPage from "./pages/ArtistsPage";
 import ArtistProfilePage from "./pages/ArtistProfilePage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
+import LogoutPage from "./pages/LogoutPage";
 import LandingPage from "./pages/LandingPage";
 
-// Only artists can access this route
+const AUTH_PATHS = ["/login", "/register", "/logout"];
+
 function ArtistRoute({ children }: { children: React.ReactNode }) {
   const { isArtist } = useAuth();
   return isArtist ? <>{children}</> : <Navigate to="/login" replace />;
 }
 
-function App() {
+function AppContent() {
+  const { pathname } = useLocation();
+  const hideHeader = AUTH_PATHS.includes(pathname);
+
   return (
-    <BrowserRouter>
-      <Header />
+    <>
+      {!hideHeader && <Header />}
 
       <Routes>
-        {/* Public routes */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/artworks" element={<Gallery />} />
 
-        {/* Auth routes */}
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/logout" element={<LogoutPage />} />
 
-        {/* Protected route */}
         <Route
           path="/artworks/create"
           element={
@@ -43,16 +46,22 @@ function App() {
           }
         />
 
-        {/* Details page */}
         <Route
           path="/artworks/:id/:slug?"
           element={<ArtworkDetailPage />}
         />
 
-        {/* Artists */}
         <Route path="/artists" element={<ArtistsPage />} />
         <Route path="/artists/:id" element={<ArtistProfilePage />} />
       </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 }

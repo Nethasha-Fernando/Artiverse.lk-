@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { ART_CATEGORIES } from "../constants/artCategories";
 
 const artworkSchema = new mongoose.Schema(
   {
@@ -20,6 +21,11 @@ const artworkSchema = new mongoose.Schema(
       type: String,
       trim: true,
       maxlength: 2000,
+    },
+    category: {
+      type: String,
+      required: true,
+      enum: ART_CATEGORIES,
     },
     orientation: {
     type: String,

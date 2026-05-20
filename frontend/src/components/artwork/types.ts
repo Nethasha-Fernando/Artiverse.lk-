@@ -5,6 +5,7 @@ export type Artwork = {
   images?: string[];         // ← add if missing
   title: string;
   artistName: string;
+  category: string;
   medium: string;
   size?: string;             // ← add if missing
   price: number;

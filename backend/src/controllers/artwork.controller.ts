@@ -8,14 +8,14 @@ import { artworkDetailsService } from "../services/artworkDetail";
 export async function createArtwork(req: AuthRequest, res: Response) {
   try {
     const {
-      name, description, orientation,
+      name, description, category, orientation,
       mainImageUrl, supportingImageUrls,
       originalArt, frameOptions, prints, framesAvailable,
     } = req.body;
 
     const doc = await Artwork.create({
       artist: req.user!.id,  // stamp the logged-in artist's id
-      name, description, orientation,
+      name, description, category, orientation,
       mainImageUrl, supportingImageUrls,
       originalArt, frameOptions, prints, framesAvailable,
     });
@@ -33,10 +33,11 @@ export async function createArtwork(req: AuthRequest, res: Response) {
   }
 }
 
-/** GET /api/artworks — public */
-export async function listArtworks(_req: Request, res: Response) {
+/** GET /api/artworks — public (?category=Tempera) */
+export async function listArtworks(req: Request, res: Response) {
   try {
-    const items = await listArtworksService();
+    const raw = typeof req.query.category === "string" ? req.query.category.trim() : "";
+    const items = await listArtworksService(raw || undefined);
     return res.json(items);
   } catch (err) {
     console.error("listArtworks error:", err);

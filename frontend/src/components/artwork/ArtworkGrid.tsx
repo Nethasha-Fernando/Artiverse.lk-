@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { ALL_CATEGORY_LABEL } from "../../constants/artCategories";
 
 type GridItem = {
   // here we say that the each item in the grid (griditem) should have a label of data type string and so on, also we do this bcz in typescript we do it also it makes sure that the comp knows what type of data type each should have..
@@ -7,15 +8,23 @@ type GridItem = {
 };
 
 type ArtworkGridProps = {
-  // Again here props will be used cz the grid component will be passed from App.jsx to ArtworkGrid.jsx, and inside we say the grid should have the data type gridItem
   grid: GridItem[];
+  selectedLabel?: string | null;
+  onSelect?: (label: string) => void;
 };
 
-function ArtworkGrid({ grid }: ArtworkGridProps) {
-  //here we destructure the props...
+function ArtworkGrid({ grid, selectedLabel = ALL_CATEGORY_LABEL, onSelect }: ArtworkGridProps) {
   const visibleCount = 5;
   const middleIndex = Math.floor(visibleCount / 2);
-  const [selectedIndex, setSelectedIndex] = useState<number>(middleIndex); //selctedIndex is initially set to the middleIndex which is a number(idk y number and not int)
+  const defaultIndex = Math.max(0, grid.findIndex((g) => g.label === ALL_CATEGORY_LABEL));
+  const [selectedIndex, setSelectedIndex] = useState<number>(
+    defaultIndex >= 0 ? defaultIndex : middleIndex,
+  );
+
+  useEffect(() => {
+    const idx = grid.findIndex((g) => g.label === selectedLabel);
+    if (idx >= 0) setSelectedIndex(idx);
+  }, [selectedLabel, grid]);
 
   const handlePrev = () => {
     // what this does is it checks if the selected index>0 if so sets the selected Index using usestate to selectedindex +1 so basically if the user presses the left arrow this function is called and selected the nect index so if initllay 1 was selected now its 0..
@@ -31,7 +40,6 @@ function ArtworkGrid({ grid }: ArtworkGridProps) {
   const sizeCls = (distance: number) => {
     //distance 0 = middle       distance 1 = next to the middle   etc  //styles the size of the card
     if (distance === 0)
-      // 0 is the center card and therefore it ll have diffenret styling
       return "basis-[200px] h-[150px] border-[3px] border-[#ff4d4d] shadow-[0px_5px_30px_rgba(255,92,92,0.6)]";
     if (distance === 1) return "basis-[170px] h-[130px]";
     if (distance === 2) return "basis-[150px] h-[110px]";
@@ -76,19 +84,18 @@ function ArtworkGrid({ grid }: ArtworkGridProps) {
           const item = grid[actualIndex];
           const distance = Math.abs(actualIndex - selectedIndex);
           const isCenter = distance === 0;
-
           return (
             <button
               key={`${item.label}-${actualIndex}`}
               type="button"
-              onClick={() => setSelectedIndex(actualIndex)}
+              onClick={() => {
+                setSelectedIndex(actualIndex);
+                onSelect?.(item.label);
+              }}
               className={[
-                // base card
-                "relative overflow-hidden cursor-pointer rounded-[12px] border-0 transition-all duration-300 ease-linear",
-                "shrink-0 grow-0",
-                // size by distance
+                "relative overflow-hidden cursor-pointer rounded-[12px] transition-all duration-300 ease-linear",
+                "shrink-0 grow-0 border-0",
                 sizeCls(distance),
-                // hover effects on all
                 "hover:shadow-[0px_5px_30px_rgba(255,92,92,0.75)] hover:-translate-y-[5px]",
               ].join(" ")}
             >

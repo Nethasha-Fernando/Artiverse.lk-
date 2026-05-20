@@ -11,7 +11,8 @@ function formatLikes(n = 0) {
 }
 
 export default function ArtworkCard({ artwork }: ArtworkCardProps) {
-  const { id, slug, imageURL, title, artistName, medium, price, likes = 0 } = artwork;
+  const { id, slug, imageURL, title, artistName, category, price, likes = 0 } = artwork;
+  const tag = category?.trim() || "Art";
   const navigate = useNavigate();
   const to = `/artworks/${id}/${slug}`;
 
@@ -71,7 +72,7 @@ export default function ArtworkCard({ artwork }: ArtworkCardProps) {
           {artistName}
         </p>
         <p className="font-['Roboto'] font-light text-[11px] text-[#888888]">
-          #{medium}
+          #{tag}
         </p>
 
         <div className="mt-2 flex items-center justify-between">

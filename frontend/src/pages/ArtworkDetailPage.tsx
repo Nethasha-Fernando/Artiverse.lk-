@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import type { Artwork } from "../components/artwork/types";
 import ImageGallery       from "../components/artwork/ImageGallery";
@@ -31,6 +31,49 @@ interface FullArtwork extends Artwork {
   prints?:        Print[];
   frames?:        Frame[];
   originalArtRaw?: { widthCm: number; heightCm: number };
+}
+
+interface ApiPrintSize {
+  width?: number;
+  height?: number;
+  price?: number;
+}
+
+interface ApiPrint {
+  surfaceMaterial?: string;
+  sizes?: ApiPrintSize[];
+}
+
+interface ApiFrameOption {
+  material?: string;
+  color?: string;
+  widthCm?: number;
+  extraPriceLkr?: number;
+}
+
+interface ArtworkApiResponse {
+  error?: string;
+  _id: string;
+  name: string;
+  category?: string;
+  description?: string;
+  mainImageUrl: string;
+  supportingImageUrls?: string[];
+  artistName?: string;
+  originalArt?: {
+    surfaceMaterial?: string;
+    widthCm?: number;
+    heightCm?: number;
+    priceLkr?: number;
+    isFramed?: boolean;
+  };
+  frameOptions?: ApiFrameOption[];
+  prints?: ApiPrint[];
+}
+
+function roundLkr(n: unknown): number {
+  const v = Number(n);
+  return Number.isFinite(v) ? Math.round(v) : 0;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -155,17 +198,27 @@ export default function ArtworkDetailPage() {
     if (!id) return;
     setLoading(true);
 
-    fetch(`http://localhost:4000/api/artworks/${id}`)
+    fetch(`/api/artworks/${id}`)
       .then((r) => r.json())
-      .then((data) => {
+      .then((data: ArtworkApiResponse) => {
         if (data.error) { setNotFound(true); return; }
 
-        const mappedFrames: Frame[] = (data.frameOptions ?? []).map((f: any) => ({
-          id:           `${f.material ?? ""}-${f.color ?? ""}-${f.widthCm ?? 0}`,
-          material:     f.material     ?? "",
-          color:        f.color        ?? "",
-          widthCm:      typeof f.widthCm      === "number" ? f.widthCm      : 0,
-          extraPriceLkr: typeof f.extraPriceLkr === "number" ? f.extraPriceLkr : null,
+        const mappedFrames: Frame[] = (data.frameOptions ?? []).map((f) => ({
+          id:            `${f.material ?? ""}-${f.color ?? ""}-${f.widthCm ?? 0}`,
+          material:      f.material ?? "",
+          color:         f.color ?? "",
+          widthCm:       roundLkr(f.widthCm),
+          extraPriceLkr: f.extraPriceLkr != null ? roundLkr(f.extraPriceLkr) : null,
+        }));
+
+        const mappedPrints: Print[] = (data.prints ?? []).map((p, pi) => ({
+          id:              pi,
+          surfaceMaterial: p.surfaceMaterial ?? "",
+          sizes: (p.sizes ?? []).map((s) => ({
+            width:  roundLkr(s.width),
+            height: roundLkr(s.height),
+            price:  roundLkr(s.price),
+          })),
         }));
 
         const mapped: FullArtwork = {
@@ -174,20 +227,21 @@ export default function ArtworkDetailPage() {
           imageURL:    data.mainImageUrl,
           images:      [data.mainImageUrl, ...(data.supportingImageUrls ?? [])],
           title:       data.name,
-          artistName:  data.artistName ?? "Unknown", // TODO: populate from API
+          artistName:  data.artistName ?? "Unknown",
+          category:    data.category ?? "",
           medium:      data.originalArt?.surfaceMaterial ?? "",
           size:        `${data.originalArt?.widthCm ?? "?"} x ${data.originalArt?.heightCm ?? "?"}`,
-          price:       data.originalArt?.priceLkr ?? 0,
+          price:       roundLkr(data.originalArt?.priceLkr),
           likes:       0,
           description: data.description ?? "",
           frameDetails: data.originalArt?.isFramed
             ? "This artwork comes framed."
             : "This artwork is not framed.",
-          prints:         data.prints ?? [],
+          prints:         mappedPrints,
           frames:         mappedFrames,
           originalArtRaw: {
-            widthCm:  data.originalArt?.widthCm  ?? 0,
-            heightCm: data.originalArt?.heightCm ?? 0,
+            widthCm:  roundLkr(data.originalArt?.widthCm),
+            heightCm: roundLkr(data.originalArt?.heightCm),
           },
         };
 
@@ -419,6 +473,12 @@ export default function ArtworkDetailPage() {
 
           {edition === "original" && (
             <div className="text-sm text-gray-700 space-y-0.5">
+              {artwork.category && (
+                <div className="flex gap-2">
+                  <span className="text-gray-400 w-24 shrink-0">Category :</span>
+                  <span className="font-medium text-gray-800">{artwork.category}</span>
+                </div>
+              )}
               <div className="flex gap-2">
                 <span className="text-gray-400 w-24 shrink-0">Material :</span>
                 <span className="font-medium text-gray-800">{currentMaterial}</span>
