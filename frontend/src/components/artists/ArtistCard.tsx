@@ -1,23 +1,15 @@
 import React from "react";
+import type { ArtistListItem } from "../../types/artistProfile";
+import { formatStatCount } from "../../utils/formatStatCount";
 import ViewProfileButton from "./ViewProfileButton";
 
-export type Artist = {
-  id: string;
-  name: string;
-  profileImage: string;
-  coverImage: string;
-  likes: number;
-  followers: number;
-};
+export type { ArtistListItem as Artist };
 
-function formatStatCount(value: number): string {
-  if (value >= 1000) {
-    return `${(value / 1000).toFixed(1)}K`;
-  }
-  return String(value);
+interface ArtistCardProps {
+  artist: ArtistListItem;
 }
 
-export default function ArtistCard({ artist }: { artist: Artist }) {
+export default function ArtistCard({ artist }: ArtistCardProps) {
   return (
     <article className="w-[280px] overflow-hidden rounded-[20px] border border-[#C4C4C4] bg-card-background shadow-card transition duration-200 hover:-translate-y-0.5 hover:shadow-card-hover">
       <div className="relative h-[155px]">
@@ -54,7 +46,7 @@ export default function ArtistCard({ artist }: { artist: Artist }) {
           </div>
         </div>
 
-        <ViewProfileButton />
+        <ViewProfileButton to={`/artists/${artist.slug}`} />
       </div>
     </article>
   );

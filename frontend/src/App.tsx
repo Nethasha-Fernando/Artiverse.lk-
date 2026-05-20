@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
 
 import Header from "./components/common/header";
 
@@ -9,6 +9,7 @@ import ArtworkFilters from "./components/artwork/ArtworkFilters";
 import ArtworkGrid from "./components/artwork/ArtworkGrid";
 import CreateArtworkPage from "./pages/CreateArtworkPage";
 import ArtistsPage from "./pages/ArtistsPage";
+import ArtistProfilePage from "./pages/ArtistProfilePage";
 
 type GridItem = {
   label: string;
@@ -69,6 +70,11 @@ function App() {
         <Route
           path="/artists"
           element={<ArtistsPage />}
+        />
+
+        <Route
+          path="/artists/:id"
+          element={<ArtistProfilePage />}
         />
 
         <Route
