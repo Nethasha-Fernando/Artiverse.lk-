@@ -1,21 +1,18 @@
 import { Router } from "express";
 import {
-  createArtwork,
-  listArtworks,
-  artworkDetail, // ✅ Add this!
-  deleteArtwork
+  createArtwork, listArtworks, artworkDetail, deleteArtwork,
 } from "../controllers/artwork.controller";
 import validateRequest from "../middleware/validateRequest";
+import { authenticate, requireArtist } from "../middleware/authenticate";
 
-const router = Router();  
+const router = Router();
 
-router.get("/", listArtworks);  //shows all the artworks created by each artsist
-router.get('/:idOrSlug', artworkDetail); //api/artwork/atworkid
+// ✅ Public
+router.get("/",          listArtworks);
+router.get("/:idOrSlug", artworkDetail);
 
-
-router.post("/", validateRequest, createArtwork); // after the artwork is ceated and sumbitted validation happens and if all good then artwork is cteated and saved in mongoDB
-router.delete("/:id", deleteArtwork); 
+// 🔒 Artists only
+router.post("/",      authenticate, requireArtist, validateRequest, createArtwork);
+router.delete("/:id", authenticate, requireArtist, deleteArtwork);
 
 export default router;
-//// server.ts
-//app.use("/api/artworks", artworkRouter);

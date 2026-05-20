@@ -1,82 +1,44 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useState } from "react";
+import { useAuth } from "./context/AuthContext";
 
 import ArtworkDetailPage from "./pages/ArtworkDetailPage";
-import Gallery from "./components/artwork/Gallery";
-import ArtworkFilters from "./components/artwork/ArtworkFilters";
-import ArtworkGrid from "./components/artwork/ArtworkGrid";
+import Gallery           from "./components/artwork/Gallery";
 import CreateArtworkPage from "./pages/CreateArtworkPage";
+import RegisterPage      from "./pages/RegisterPage";
+import LoginPage         from "./pages/LoginPage";
+import LandingPage       from "./pages/LandingPage";
 
-type GridItem = {
-  label: string;
-  image?: string;
-};
-
-type ArtTypeMap = Record<string, string[]>;
+// Only artists can access this route
+function ArtistRoute({ children }: { children: React.ReactNode }) {
+  const { isArtist } = useAuth();
+  return isArtist ? <>{children}</> : <Navigate to="/login" replace />;
+}
 
 function App() {
-  const [showFilters, setShowFilters] = useState<boolean>(false);
-
-  const grid: GridItem[] = [
-    { label: "Gouache", image: "/oil paiting.jpg" },
-  { label: "Tempera", image: "/oil paiting.jpg" },
-  { label: "Oil", image: "/oil paiting.jpg" },
-  { label: "Acrylic", image: "/oil paiting.jpg" },
-  { label: "Watercolor", image: "/oil paiting.jpg" },
-  { label: "Charcoal", image: "/oil paiting.jpg"},
-  { label: "Pencil", image: "/oil paiting.jpg" },
-  { label: "Ink", image: "/oil paiting.jpg" },
-];
-
-  const ArtType: ArtTypeMap = {
-    Painting: ["Oil", "Acrylic", "Watercolor", "Gouache", "Tempera"],
-    Drawing: ["Pencil", "Charcoal", "Ink"],
-    DigitalArt: ["3D", "Vector", "Pixel"],
-    Sculpture: ["Stone", "Wood", "Metal"],
-  };
-
-  const Themes: string[] = ["Animals", "Nature", "Buildings", "Women"];
-  const priceRange = { min: 0, max: 10000 };
-
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public routes */}
+        <Route path="/"        element={<LandingPage />} />
+        <Route path="/artworks" element={<Gallery />} />
+
+        {/* Static routes must come before dynamic :id ones */}
         <Route
-          path="/artworks"
+          path="/artworks/create"
           element={
-            <div>
-              <Gallery />
-            </div>
+            <ArtistRoute>
+              <CreateArtworkPage />
+            </ArtistRoute>
           }
         />
-
-        <Route path="/artworks/create" element={<CreateArtworkPage />} />
         <Route path="/artworks/:id/:slug?" element={<ArtworkDetailPage />} />
-        
 
-        {/* Redirect root → /artworks */}
-        <Route path="/" element={<Navigate to="/artworks" replace />} />
+        {/* Auth */}
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login"    element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
-
-
-
-// function App() {
-
-//  const [showFilters, setShowFilters] = useState(false);
-
-//  const grid = [
-//  { label: "Gouache", image: "/oil paiting.jpg" },
-//  { label: "Tempera", image: "/oil paiting.jpg" },
-//  { label: "Oil", image: "/oil paiting.jpg" },
-//  { label: "Acrylic", image: "/oil paiting.jpg" },
-//  { label: "Watercolor", image: "/oil paiting.jpg" },
-//  { label: "Charcoal", image: "/oil paiting.jpg"},
-//  { label: "Pencil", image: "/oil paiting.jpg" },
-//  { label: "Ink", image: "/oil paiting.jpg" },
-//];
-

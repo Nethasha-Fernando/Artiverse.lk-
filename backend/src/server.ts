@@ -1,12 +1,10 @@
-// src/server.ts
-// Entry point: sets up Express, connects MongoDB, mounts routes, and exposes /health.
-
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import artworkRoutes from "./routes/artwork.routes";
 import path from "path";
+import authRoutes    from "./routes/auth.routes";
+import artworkRoutes from "./routes/artwork.routes";
 
 dotenv.config();
 
@@ -17,34 +15,31 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ---------- Health Check ----------
-app.get("/health", (_req, res) => {   //just to see of mongoDb is connected
-  // readyState codes: 0=disconnected, 1=connected, 2=connecting, 3=disconnecting
+// ---------- Static files ----------
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
+// ---------- Health check ----------
+app.get("/health", (_req, res) => {
   const stateNames: Record<number, string> = {
     0: "disconnected",
     1: "connected",
     2: "connecting",
     3: "disconnecting",
   };
-  const db = stateNames[mongoose.connection.readyState] ?? "unknown";  //acording to the state the number is given
-
-  res.status(200).json({  //if no errors (200)
+  res.status(200).json({
     status: "ok",
-    db,
+    db:         stateNames[mongoose.connection.readyState] ?? "unknown",
     uptime_sec: Math.round(process.uptime()),
-    time: new Date().toISOString(),
+    time:       new Date().toISOString(),
   });
 });
 
-
-app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
-
 // ---------- Routes ----------
-app.use("/api/artworks", artworkRoutes);  //so all URLs start with /api/artworks
-
+app.use("/api/auth",     authRoutes);
+app.use("/api/artworks", artworkRoutes);
 
 // ---------- DB + Server ----------
-const PORT = Number(process.env.PORT) || 4000;
+const PORT      = Number(process.env.PORT) || 4000;
 const MONGO_URI = process.env.MONGO_URI;
 
 if (!MONGO_URI) {
@@ -56,8 +51,10 @@ mongoose
   .then(() => {
     app.listen(PORT, () => {
       console.log(`✅ API running at http://localhost:${PORT}`);
-      console.log(`🩺 Health:        GET http://localhost:${PORT}/health`);
-      console.log(`🎨 Artworks API:  GET/POST http://localhost:${PORT}/api/artworks`);
+      console.log(`🩺 Health:       GET  http://localhost:${PORT}/health`);
+      console.log(`🔐 Auth:         POST http://localhost:${PORT}/api/auth/register`);
+      console.log(`🔐 Auth:         POST http://localhost:${PORT}/api/auth/login`);
+      console.log(`🎨 Artworks:     GET  http://localhost:${PORT}/api/artworks`);
     });
   })
   .catch((err) => {

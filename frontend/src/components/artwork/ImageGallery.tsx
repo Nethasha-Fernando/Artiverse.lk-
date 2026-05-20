@@ -26,7 +26,7 @@ export default function ImageGallery({ images, title }: Props) {
           alt={title ?? ""}
           className="w-full max-h-[560px] object-cover rounded-xl border"
         />
-        {/* Button BELOW image, centered, red outline */}
+        {/* "View in room" — coming soon
         <div className="mt-3 flex justify-center">
           <button
             type="button"
@@ -35,9 +35,10 @@ export default function ImageGallery({ images, title }: Props) {
             View in room
           </button>
         </div>
+        */}
       </div>
 
-      {/* Thumbnails on the RIGHT (vertical rail) */}
+      {/* Thumbnail rail */}
       <div className="flex flex-col gap-3">
         {images.map((src, i) => (
           <button

@@ -2,6 +2,12 @@ import mongoose from "mongoose";
 
 const artworkSchema = new mongoose.Schema(
   {
+    // ── ADD THIS at the top ──────────────────────────────
+    artist: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",     // links to your User model
+      required: true,  // every artwork must belong to an artist
+    },
     // ---------- Basics ----------
     name: {
       type: String,
