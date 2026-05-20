@@ -1,5 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import React, { useState } from "react";
+import MyCartPage from "./pages/MyCartPage"
+
+
+
 
 import Header from "./components/common/header";
 
@@ -53,41 +57,47 @@ function App() {
 
       {/* Routes */}
       <Routes>
-        <Route
-          path="/artworks"
-          element={
-            <div>
-              <Gallery />
-            </div>
-          }
-        />
+  <Route
+    path="/artworks"
+    element={
+      <div>
+        <Gallery />
+      </div>
+    }
+  />
 
-        <Route
-          path="/artworks/create"
-          element={<CreateArtworkPage />}
-        />
+  <Route
+    path="/artworks/create"
+    element={<CreateArtworkPage />}
+  />
 
-        <Route
-          path="/artists"
-          element={<ArtistsPage />}
-        />
+  <Route
+    path="/artists"
+    element={<ArtistsPage />}
+  />
 
-        <Route
-          path="/artists/:id"
-          element={<ArtistProfilePage />}
-        />
+  <Route
+    path="/artists/:id"
+    element={<ArtistProfilePage />}
+  />
 
-        <Route
-          path="/artworks/:id/:slug?"
-          element={<ArtworkDetailPage />}
-        />
+  <Route
+    path="/artworks/:id/:slug?"
+    element={<ArtworkDetailPage />}
+  />
 
-        {/* Redirect root → /artworks */}
-        <Route
-          path="/"
-          element={<Navigate to="/artworks" replace />}
-        />
-      </Routes>
+  {/* MY CART PAGE */}
+  <Route
+    path="/cart"
+    element={<MyCartPage />}
+  />
+
+  {/* Redirect root → /artworks */}
+  <Route
+    path="/"
+    element={<Navigate to="/artworks" replace />}
+  />
+</Routes>
     </BrowserRouter>
   );
 }
