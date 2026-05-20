@@ -5,6 +5,7 @@ export default function ArtworkDetails({
   material,
   size,
   location,
+  orientation,
   notFramedNote,
 }: {
   title: string;
@@ -13,6 +14,7 @@ export default function ArtworkDetails({
   material: string;
   size: string;
   location?: string;
+  orientation: string;
   notFramedNote?: string;
 }) {
   return (
@@ -29,6 +31,7 @@ export default function ArtworkDetails({
         <span className="text-sm text-red-500">Price</span>
         <p className="mt-1 text-sm text-gray-600">Material: {material}</p>
         <p className="text-sm text-gray-600">Size: {size}</p>
+        <p className="text-sm text-gray-600">Size: {orientation}</p>
         {notFramedNote && (
           <p className="text-sm font-medium mt-2">{notFramedNote}</p>
         )}
