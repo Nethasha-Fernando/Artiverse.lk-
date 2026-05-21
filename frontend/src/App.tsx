@@ -1,18 +1,18 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import React from "react";
 
-import Header from "./components/common/header";
-import { useAuth } from "./context/AuthContext";
+import Header             from "./components/common/header";
+import { useAuth }        from "./context/AuthContext";
 
-import ArtworkDetailPage from "./pages/ArtworkDetailPage";
-import Gallery from "./components/artwork/Gallery";
-import CreateArtworkPage from "./pages/CreateArtworkPage";
-import ArtistsPage from "./pages/ArtistsPage";
-import ArtistProfilePage from "./pages/ArtistProfilePage";
-import RegisterPage from "./pages/RegisterPage";
-import LoginPage from "./pages/LoginPage";
-import LogoutPage from "./pages/LogoutPage";
-import LandingPage from "./pages/LandingPage";
+import LandingPage        from "./pages/LandingPage";
+import ArtworkExplorePage from "./pages/ArtworkExplorePage";
+import ArtworkDetailPage  from "./pages/ArtworkDetailPage";
+import CreateArtworkPage  from "./pages/CreateArtworkPage";
+import ArtistsPage        from "./pages/ArtistsPage";
+import ArtistProfilePage  from "./pages/ArtistProfilePage";
+import RegisterPage       from "./pages/RegisterPage";
+import LoginPage          from "./pages/LoginPage";
+import LogoutPage         from "./pages/LogoutPage";
 
 const AUTH_PATHS = ["/login", "/register", "/logout"];
 
@@ -30,12 +30,12 @@ function AppContent() {
       {!hideHeader && <Header />}
 
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/artworks" element={<Gallery />} />
+        <Route path="/"         element={<LandingPage />} />
+        <Route path="/artworks" element={<ArtworkExplorePage />} />
 
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/logout" element={<LogoutPage />} />
+        <Route path="/login"    element={<LoginPage />} />
+        <Route path="/logout"   element={<LogoutPage />} />
 
         <Route
           path="/artworks/create"
@@ -46,13 +46,9 @@ function AppContent() {
           }
         />
 
-        <Route
-          path="/artworks/:id/:slug?"
-          element={<ArtworkDetailPage />}
-        />
-
-        <Route path="/artists" element={<ArtistsPage />} />
-        <Route path="/artists/:id" element={<ArtistProfilePage />} />
+        <Route path="/artworks/:id/:slug?" element={<ArtworkDetailPage />} />
+        <Route path="/artists"            element={<ArtistsPage />} />
+        <Route path="/artists/:id"        element={<ArtistProfilePage />} />
       </Routes>
     </>
   );

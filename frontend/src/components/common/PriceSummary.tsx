@@ -1,12 +1,10 @@
-// src/components/artwork/PriceSummaryArtwork.tsx
-
 type Props = {
   artPrice:   number;
   framePrice: number;
   edition:    "original" | "prints";
 };
 
-export default function PriceSummaryArtwork({ artPrice, framePrice, edition }: Props) {
+export default function PriceSummary({ artPrice, framePrice, edition }: Props) {
   const total    = artPrice + framePrice;
   const fmt      = (n: number) => `LKR ${n.toLocaleString("en-LK")}`;
   const artLabel = edition === "original" ? "Original Art" : "Print";

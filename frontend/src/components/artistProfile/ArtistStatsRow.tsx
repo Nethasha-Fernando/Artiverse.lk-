@@ -1,5 +1,5 @@
 import React from "react";
-import { formatStatCount } from "../../utils/formatStatCount";
+import { formatStatCount } from "../../shared/utils/format";
 
 interface ArtistStatsRowProps {
   followers: number;
@@ -13,7 +13,9 @@ function StatBlock({ value, label }: { value: string; label: string }) {
       <p className="text-base font-bold text-text-main-heading sm:text-[18px]">
         {value}
       </p>
-      <p className="text-xs font-normal text-text-sub-body sm:text-sm">{label}</p>
+      <p className="text-xs font-normal text-text-sub-body sm:text-sm">
+        {label}
+      </p>
     </div>
   );
 }

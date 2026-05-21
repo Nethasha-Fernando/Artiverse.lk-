@@ -1,6 +1,6 @@
 import React from "react";
 import type { ArtistListItem } from "../../types/artistProfile";
-import { formatStatCount } from "../../utils/formatStatCount";
+import { formatStatCount } from "../../shared/utils/format";
 import ViewProfileButton from "./ViewProfileButton";
 
 export type { ArtistListItem as Artist };
