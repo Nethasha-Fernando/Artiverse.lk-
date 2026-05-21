@@ -12,6 +12,9 @@ import ArtistsPage        from "./pages/ArtistsPage";
 import ArtistProfilePage  from "./pages/ArtistProfilePage";
 import OwnProfilePage     from "./pages/OwnProfilePage";
 import EditProfilePage    from "./pages/EditProfilePage";
+import EventsPage         from "./pages/EventsPage";
+import EventDetailPage    from "./pages/EventDetailPage";
+import AddEventPage       from "./pages/AddEventPage";
 import RegisterPage       from "./pages/RegisterPage";
 import LoginPage          from "./pages/LoginPage";
 import LogoutPage         from "./pages/LogoutPage";
@@ -52,6 +55,16 @@ function AppContent() {
         <Route path="/artworks/:id/:slug?" element={<ArtworkDetailPage />} />
         <Route path="/artists"            element={<ArtistsPage />} />
         <Route path="/artists/:id"        element={<ArtistProfilePage />} />
+        <Route path="/events"             element={<EventsPage />} />
+        <Route path="/events/:eventId"    element={<EventDetailPage />} />
+        <Route
+          path="/add-event"
+          element={
+            <ArtistRoute>
+              <AddEventPage />
+            </ArtistRoute>
+          }
+        />
 
         <Route
           path="/profile"

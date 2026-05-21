@@ -76,7 +76,10 @@ export default function ArtistProfilePage({
                 />
               )}
               {activeTab === "events" && (
-                <ProfileEventsTab events={artist.events} />
+                <ProfileEventsTab
+                  artistId={artist.id}
+                  isOwnProfile={isOwnProfile}
+                />
               )}
             </div>
           </div>

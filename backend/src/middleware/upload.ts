@@ -4,8 +4,9 @@ import multer from "multer";
 
 const profileDir = path.join(process.cwd(), "uploads", "artists", "profiles");
 const backgroundDir = path.join(process.cwd(), "uploads", "artists", "backgrounds");
+const eventsDir = path.join(process.cwd(), "uploads", "events");
 
-[profileDir, backgroundDir].forEach((dir) => {
+[profileDir, backgroundDir, eventsDir].forEach((dir) => {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 });
 
@@ -39,6 +40,12 @@ export const uploadBackgroundImage = multer({
   limits: { fileSize: 8 * 1024 * 1024 },
   fileFilter: imageFilter,
 }).single("image");
+
+export const uploadEventCover = multer({
+  storage: imageStorage(eventsDir),
+  limits: { fileSize: 8 * 1024 * 1024 },
+  fileFilter: imageFilter,
+});
 
 export function toPublicUploadUrl(filename: string, type: "profiles" | "backgrounds"): string {
   return `/uploads/artists/${type}/${filename}`;

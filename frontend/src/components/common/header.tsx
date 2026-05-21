@@ -50,7 +50,7 @@ const Header = () => {
             { label: 'Home', to: '/' },
             { label: 'Arts', to: '/artworks' },
             { label: 'Artists', to: '/artists' },
-            { label: 'Events', to: '#' },
+            { label: 'Events', to: '/events' },
             { label: 'Contact Us', to: '#' },
           ].map((item) => (
             <Link
@@ -204,7 +204,7 @@ const Header = () => {
             { label: 'Home', to: '/' },
             { label: 'Arts', to: '/artworks' },
             { label: 'Artists', to: '/artists' },
-            { label: 'Events', to: '#' },
+            { label: 'Events', to: '/events' },
             { label: 'Contact Us', to: '#' },
           ].map((item) => (
             <Link
