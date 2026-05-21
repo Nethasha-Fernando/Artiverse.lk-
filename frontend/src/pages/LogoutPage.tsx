@@ -28,10 +28,7 @@ export default function LogoutPage() {
           >
             Sign in again
           </button>
-          <Link
-            to="/artworks"
-            className="text-sm text-red-400 hover:underline"
-          >
+          <Link to="/artworks" className="text-sm text-red-400 hover:underline">
             Continue browsing artworks
           </Link>
         </div>

@@ -1,7 +1,6 @@
 import { useEffect, type ReactNode } from "react";
-import { Link } from "react-router-dom";
-import { AUTH_PAGE_BG } from "../../constants/artCategories";
-
+import { Link } from "react-router-dom";import { ALL_CATEGORY_LABEL,
+  CATEGORY_GRID_ITEMS, } from "../../shared/constants/artCategories";
 type AuthPageLayoutProps = {
   children: ReactNode;
   compact?: boolean;
@@ -18,12 +17,7 @@ export default function AuthPageLayout({ children, compact = false }: AuthPageLa
 
   return (
     <div className="fixed inset-0 z-50 h-screen w-screen overflow-hidden flex items-center justify-center">
-      <img
-        src={AUTH_PAGE_BG}
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover"
-        aria-hidden
-      />
+      {/* Background image removed to avoid missing asset error; gradient overlay kept */}
       <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/40" />
 
       <div className="relative z-10 w-full max-w-md mx-4 flex flex-col shrink-0">
