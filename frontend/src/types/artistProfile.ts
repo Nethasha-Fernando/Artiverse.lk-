@@ -1,8 +1,11 @@
 export interface ArtistSocialLinks {
   facebook?: string;
   instagram?: string;
+  linkedin?: string;
+  twitter?: string;
   tiktok?: string;
   youtube?: string;
+  website?: string;
 }
 
 export interface ArtistPersonalLink {
@@ -29,8 +32,16 @@ export interface ArtistProfile {
   id: string;
   slug: string;
   name: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
   city: string;
   country: string;
+  district?: string;
+  address?: string;
+  postalCode?: string;
+  artCategories?: string[];
+  aboutArtist?: string;
   profileImage: string;
   coverImage: string;
   followers: number;

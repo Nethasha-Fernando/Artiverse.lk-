@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import AboutSection from "../components/artistProfile/AboutSection";
 import ProfileArtsTab from "../components/artistProfile/ProfileArtsTab";
 import ProfileAvatar from "../components/artistProfile/ProfileAvatar";
@@ -16,9 +17,18 @@ import {
 import { useArtistProfile } from "../hooks/useArtistProfile";
 import type { ArtistProfileTab } from "../types/artistProfile";
 
-export default function ArtistProfilePage() {
+interface ArtistProfilePageProps {
+  /** When true, loads the logged-in artist via /api/artists/me */
+  ownProfile?: boolean;
+}
+
+export default function ArtistProfilePage({
+  ownProfile = false,
+}: ArtistProfilePageProps) {
   const { id } = useParams<{ id: string }>();
-  const state = useArtistProfile(id);
+  const { user } = useAuth();
+  const profileKey = ownProfile ? "me" : id;
+  const state = useArtistProfile(profileKey);
   const [activeTab, setActiveTab] = useState<ArtistProfileTab>("overview");
 
   if (state.status === "loading") {
@@ -34,13 +44,15 @@ export default function ArtistProfilePage() {
   }
 
   const { data: artist } = state;
+  const isOwnProfile =
+    ownProfile ||
+    (!!user &&
+      (user.id === artist.id || (!!user.slug && user.slug === artist.slug)));
 
   return (
     <main className="min-h-screen bg-page-background pb-10">
-      {/* Edge-to-edge cover — no side padding */}
       <ProfileCover coverImage={artist.coverImage} artistName={artist.name} />
 
-      {/* Content: narrow left sidebar, wide right panel */}
       <div className="w-full px-4 sm:px-6 lg:pl-6 lg:pr-12 xl:pl-8 xl:pr-16">
         <div className="mx-auto grid w-full max-w-[1800px] grid-cols-1 items-start gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-x-10 xl:gap-x-14">
           <aside className="mx-auto w-full max-w-[260px] justify-self-start lg:mx-0">
@@ -48,7 +60,7 @@ export default function ArtistProfilePage() {
               profileImage={artist.profileImage}
               artistName={artist.name}
             />
-            <ProfileSidebarCard artist={artist} />
+            <ProfileSidebarCard artist={artist} isOwnProfile={isOwnProfile} />
             <ProfileSidebarInfo artist={artist} />
           </aside>
 

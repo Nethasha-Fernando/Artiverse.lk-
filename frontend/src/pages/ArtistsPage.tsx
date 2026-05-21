@@ -1,11 +1,9 @@
 import React from "react";
 import ArtistCard from "../components/artists/ArtistCard";
-import { getArtistListItems } from "../data/artistsMock";
-
-// Future API: GET /api/artists — map response to ArtistListItem[]
+import { useArtistsList } from "../hooks/useArtistsList";
 
 export default function ArtistsPage() {
-  const artists = getArtistListItems();
+  const state = useArtistsList();
 
   return (
     <main className="min-h-screen bg-page-background px-4 py-10 sm:px-6 lg:px-10">
@@ -18,11 +16,31 @@ export default function ArtistsPage() {
         </p>
       </section>
 
-      <section className="mx-auto mt-10 grid max-w-7xl grid-cols-1 place-items-center gap-8 md:grid-cols-2 xl:grid-cols-4">
-        {artists.map((artist) => (
-          <ArtistCard key={artist.id} artist={artist} />
-        ))}
-      </section>
+      {state.status === "loading" && (
+        <p className="mt-10 text-center font-body text-text-footnote">
+          Loading artists…
+        </p>
+      )}
+
+      {state.status === "error" && (
+        <p className="mt-10 text-center font-body text-red-500">
+          {state.message}
+        </p>
+      )}
+
+      {state.status === "success" && state.data.length === 0 && (
+        <p className="mt-10 text-center font-body text-text-footnote">
+          No artists found yet.
+        </p>
+      )}
+
+      {state.status === "success" && state.data.length > 0 && (
+        <section className="mx-auto mt-10 grid max-w-7xl grid-cols-1 place-items-center gap-8 md:grid-cols-2 xl:grid-cols-4">
+          {state.data.map((artist) => (
+            <ArtistCard key={artist.id} artist={artist} />
+          ))}
+        </section>
+      )}
     </main>
   );
 }

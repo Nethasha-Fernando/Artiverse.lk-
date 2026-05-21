@@ -129,9 +129,18 @@ const Header = () => {
 
           {user ? (
             <div className="flex items-center gap-2">
-              <span className="hidden sm:inline text-sm text-text-body font-body truncate max-w-[120px]">
-                {user.firstName}
-              </span>
+              {user.role === "artist" ? (
+                <Link
+                  to="/profile"
+                  className="hidden sm:inline text-sm text-text-body font-body truncate max-w-[120px] hover:text-text-main-heading transition-colors"
+                >
+                  {user.firstName}
+                </Link>
+              ) : (
+                <span className="hidden sm:inline text-sm text-text-body font-body truncate max-w-[120px]">
+                  {user.firstName}
+                </span>
+              )}
               <button
                 type="button"
                 onClick={() => navigate('/logout')}

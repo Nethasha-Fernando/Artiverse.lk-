@@ -57,6 +57,7 @@ export async function register(req: Request, res: Response) {
         lastName:      user.lastName,
         email:         user.email,
         role:          user.role,
+        slug:          user.slug,
         contactNumber: user.contactNumber,
       },
     });
@@ -99,6 +100,7 @@ export async function login(req: Request, res: Response) {
         lastName:  user.lastName,
         email:     user.email,
         role:      user.role,
+        slug:      user.slug,
       },
     });
 

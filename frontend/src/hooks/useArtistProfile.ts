@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 import {
   ArtistNotFoundError,
   fetchArtistProfile,
@@ -12,6 +13,7 @@ type ArtistProfileState =
   | { status: "error"; message: string };
 
 export function useArtistProfile(idOrSlug: string | undefined) {
+  const { token } = useAuth();
   const [state, setState] = useState<ArtistProfileState>({ status: "loading" });
 
   useEffect(() => {
@@ -23,25 +25,23 @@ export function useArtistProfile(idOrSlug: string | undefined) {
     let cancelled = false;
     setState({ status: "loading" });
 
-    fetchArtistProfile(idOrSlug)
-      .then((data) => {
-        if (!cancelled) {
-          setState({ status: "success", data });
-        }
-      })
-      .catch((error: unknown) => {
-        if (cancelled) return;
+    const authToken = idOrSlug === "me" ? token : null;
 
-        if (error instanceof ArtistNotFoundError) {
+    fetchArtistProfile(idOrSlug, authToken)
+      .then((data) => {
+        if (!cancelled) setState({ status: "success", data });
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        if (err instanceof ArtistNotFoundError) {
           setState({ status: "not-found" });
           return;
         }
-
         setState({
           status: "error",
           message:
-            error instanceof Error
-              ? error.message
+            err instanceof Error
+              ? err.message
               : "Something went wrong while loading this profile.",
         });
       });
@@ -49,7 +49,7 @@ export function useArtistProfile(idOrSlug: string | undefined) {
     return () => {
       cancelled = true;
     };
-  }, [idOrSlug]);
+  }, [idOrSlug, token]);
 
   return state;
 }

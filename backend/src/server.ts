@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import path from "path";
 import authRoutes    from "./routes/auth.routes";
 import artworkRoutes from "./routes/artwork.routes";
+import artistRoutes  from "./routes/artist.routes";
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.get("/health", (_req, res) => {
 // ---------- Routes ----------
 app.use("/api/auth",     authRoutes);
 app.use("/api/artworks", artworkRoutes);
+app.use("/api/artists",  artistRoutes);
 
 // ---------- DB + Server ----------
 const PORT      = Number(process.env.PORT) || 4000;

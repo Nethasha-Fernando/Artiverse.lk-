@@ -2,13 +2,18 @@ import React from "react";
 import { icons } from "../../Constants/icons";
 import type { ArtistProfile } from "../../types/artistProfile";
 import ArtistStatsRow from "./ArtistStatsRow";
+import EditProfileButton from "./EditProfileButton";
 import FollowButton from "./FollowButton";
 
 interface ProfileSidebarCardProps {
   artist: ArtistProfile;
+  isOwnProfile?: boolean;
 }
 
-export default function ProfileSidebarCard({ artist }: ProfileSidebarCardProps) {
+export default function ProfileSidebarCard({
+  artist,
+  isOwnProfile = false,
+}: ProfileSidebarCardProps) {
   const location = `${artist.city}, ${artist.country}`;
 
   return (
@@ -36,7 +41,7 @@ export default function ProfileSidebarCard({ artist }: ProfileSidebarCardProps) 
         artworksCount={artist.artworksCount}
       />
 
-      <FollowButton />
+        {isOwnProfile ? <EditProfileButton /> : <FollowButton />}
     </div>
   );
 }
