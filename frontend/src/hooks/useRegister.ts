@@ -22,7 +22,7 @@ const initialForm: RegisterForm = {
   receiveEmails: false,
 };
 
-export function useRegister() {
+export function useRegister(showToast?: (msg: string, type: "success" | "error") => void) {
   const { login }   = useAuth();
   const navigate    = useNavigate();
 
@@ -38,25 +38,26 @@ export function useRegister() {
     set("role", form.role === "artist" ? "user" : "artist");
 
   const handleSubmit = async () => {
-    setError("");
-    setLoading(true);
-    try {
-      const res  = await fetch("/api/auth/register", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify(form),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
-
-      login(data.token, data.user);
-      navigate("/artworks");
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Registration failed.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  setError("");
+  setLoading(true);
+  try {
+    const res = await fetch("/api/auth/register", {   // ← /register not /login
+      method:      "POST",
+      headers:     { "Content-Type": "application/json" },
+      credentials: "include",
+      body:        JSON.stringify(form),              // ← send the whole form object
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    login(data.accessToken, data.user);
+    showToast?.("Account created! Welcome to Artiverse 🎨", "success");
+    setTimeout(() => navigate("/artworks"), 1200);
+  } catch (err: unknown) {
+    setError(err instanceof Error ? err.message : "Registration failed.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return {
     form,

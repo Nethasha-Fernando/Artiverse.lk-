@@ -3,12 +3,16 @@ import ImageUploader         from "../components/artwork/create/ImageUploader";
 import OriginalArtSection    from "../components/artwork/create/OriginalArtSection";
 import PrintsSection         from "../components/artwork/create/PrintsSection";
 import Input                 from "../components/common/Input";
+import { useToast } from "../hooks/useToast";
+import { Toast }    from "../components/common/Toast";
 
 export default function CreateArtworkPage() {
-  const form = useArtworkForm();
+  const { toast, showToast, hideToast } = useToast();
+  const form = useArtworkForm(showToast);
 
   return (
     <div className="max-w-[860px] mx-auto p-5 space-y-4 bg-gray-50 min-h-screen">
+      {toast && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
 
       {/* ── Header ── */}
       <div className="flex items-center justify-between py-2">

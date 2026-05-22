@@ -53,9 +53,9 @@ const initialForm: ArtworkForm = {
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
 
-export function useArtworkForm() {
-  const { token } = useAuth();
-  const navigate  = useNavigate();
+export function useArtworkForm(showToast?: (msg: string, type: "success" | "error") => void) {
+  const { accessToken } = useAuth();   // ← fixed: inside hook, correct name
+  const navigate        = useNavigate();
 
   const [form,        setForm]        = useState<ArtworkForm>(initialForm);
   const [nameError,   setNameError]   = useState(false);
@@ -185,17 +185,19 @@ export function useArtworkForm() {
     };
 
     try {
-      const res  = await fetch("/api/artworks", {
-        method:  "POST",
+      const res = await fetch("/api/artworks", {
+        method:      "POST",
+        credentials: "include",           // ← send cookie along
         headers: {
           "Content-Type": "application/json",
-          Authorization:  `Bearer ${token}`,
+          Authorization:  `Bearer ${accessToken}`,  // ← fixed
         },
         body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
-      navigate("/artworks");
+      showToast?.(data.message ?? "Artwork saved successfully!", "success");
+      setTimeout(() => navigate("/artworks"), 1500); // slight delay so toast is seen
     } catch (err: unknown) {
       setSubmitError(err instanceof Error ? err.message : String(err));
     }

@@ -3,12 +3,16 @@ import { useRegister } from "../hooks/useRegister";
 import { EyeIcon, EyeOffIcon } from "../assets/icons/EyeIcons";
 import AuthPageLayout from "../components/auth/AuthPageLayout";
 import SocialButtons  from "../components/auth/SocialButtons";
+import { useToast } from "../hooks/useToast";
+import { Toast }    from "../components/common/Toast";
 
 export default function RegisterPage() {
-  const r = useRegister();
+  const { toast, showToast, hideToast } = useToast();
+  const r = useRegister(showToast);
 
   return (
     <AuthPageLayout>
+      {toast && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
       <div className="space-y-4 text-white">
         <h1 className="text-2xl font-bold text-center">Create an account</h1>
 

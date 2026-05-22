@@ -28,12 +28,21 @@ export default function ArtworkGrid({
   }, [selectedLabel, grid]);
 
   const handlePrev = () => {
-    if (selectedIndex > 0) setSelectedIndex(selectedIndex - 1);
+    if (selectedIndex > 0) {
+      const newIndex = selectedIndex - 1;
+      setSelectedIndex(newIndex);
+      onSelect?.(grid[newIndex].label);   // ← add this
+    }
   };
 
+
   const handleNext = () => {
-    if (selectedIndex < grid.length - 1) setSelectedIndex(selectedIndex + 1);
-  };
+    if (selectedIndex < grid.length - 1) {
+      const newIndex = selectedIndex + 1;
+      setSelectedIndex(newIndex);
+      onSelect?.(grid[newIndex].label);   // ← add this
+    }
+  }
 
   const sizeCls = (distance: number) => {
     if (distance === 0) return "basis-[200px] h-[150px] border-[3px] border-[#ff4d4d] shadow-[0px_5px_30px_rgba(255,92,92,0.6)]";

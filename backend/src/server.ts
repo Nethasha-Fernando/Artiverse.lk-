@@ -5,15 +5,20 @@ import dotenv from "dotenv";
 import path from "path";
 import authRoutes    from "./routes/auth.routes";
 import artworkRoutes from "./routes/artwork.routes";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
 const app = express();
 
 // ---------- Middlewares ----------
-app.use(cors());
+app.use(cors({
+  origin:      process.env.CLIENT_URL || "http://localhost:5173",
+  credentials: true,   // ← allows cookies to be sent cross-origin
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // ---------- Static files ----------
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
