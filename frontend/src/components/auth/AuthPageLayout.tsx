@@ -17,7 +17,11 @@ export default function AuthPageLayout({ children, compact = false }: AuthPageLa
 
   return (
     <div className="fixed inset-0 z-50 h-screen w-screen overflow-hidden flex items-center justify-center">
-      {/* Background image removed to avoid missing asset error; gradient overlay kept */}
+      <img
+        src="/auth-bg.jpg"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover object-center"
+      />
       <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/40" />
 
       <div className="relative z-10 w-full max-w-md mx-4 flex flex-col shrink-0">

@@ -20,7 +20,10 @@ export async function createArtwork(req: AuthRequest, res: Response) {
       originalArt, frameOptions, prints, framesAvailable,
     });
 
-    return res.status(201).json(doc);
+    return res.status(201).json({
+      message: `🎨 Artwork "${doc.name}" saved successfully!`,
+      artwork: doc,
+    });
   } catch (err: any) {
     if (err?.code === 11000) {
       return res.status(409).json({ error: "Duplicate value." });

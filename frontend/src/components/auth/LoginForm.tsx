@@ -22,15 +22,17 @@ export default function LoginForm({ onSuccess, registerLink = "navigate" }: Logi
     setError("");
     setLoading(true);
     try {
+      // change the login call:
       const res  = await fetch("/api/auth/login", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ email, password }),
+        method:      "POST",
+        headers:     { "Content-Type": "application/json" },
+        credentials: "include",  // NEW — needed to receive the httpOnly cookie
+        body:        JSON.stringify({ email, password }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      login(data.token, data.user);
+      login(data.accessToken, data.user); // was data.token
       onSuccess?.();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Sign in failed.");

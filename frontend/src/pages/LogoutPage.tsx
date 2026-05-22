@@ -8,7 +8,7 @@ export default function LogoutPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    logout();
+    logout(); // now async but fire-and-forget is fine here
   }, [logout]);
 
   return (
